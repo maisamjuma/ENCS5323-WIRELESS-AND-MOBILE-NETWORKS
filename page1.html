@@ -6,5 +6,35 @@
 <body>
     <h1>Welcome to Page 1</h1>
     <button onclick="location.href='/'">Go to Home</button>
+
+    <h2>Calculator</h2>
+    <form method="POST">
+        <label for="bw">Bandwidth (Hz):</label>
+        <input type="number" step="any" id="bw" name="bw" required><br><br>
+
+        <label for="num_bits_quantizer">Number of Bits for Quantizer:</label>
+        <input type="number" id="num_bits_quantizer" name="num_bits_quantizer" required><br><br>
+
+        <label for="source_encoder_rate">Source Encoder Compression Rate:</label>
+        <input type="number" step="any" id="source_encoder_rate" name="source_encoder_rate" required><br><br>
+
+        <label for="channel_encoder_rate">Channel Encoder Rate:</label>
+        <input type="number" step="any" id="channel_encoder_rate" name="channel_encoder_rate" required><br><br>
+
+        <label for="interleaver_bits">Interleaver Number of Bits:</label>
+        <input type="number" id="interleaver_bits" name="interleaver_bits" required><br><br>
+
+        <button type="submit">Calculate</button>
+    </form>
+
+    {% if sampling_frequency is not none %}
+    <h3>Results:</h3>
+    <p>Sampling Frequency: {{ sampling_frequency }} Hz</p>
+    <p>Quantization Levels: {{ quantization_levels }}</p>
+    <p>Number of Bits at Input of Source Encoder: {{ num_bits_source_input }}</p>
+    <p>Bit Rate at Output of Source Encoder: {{ source_encoder_output }}</p>
+    <p>Bit Rate at Output of Channel Encoder: {{ channel_encoder_output }}</p>
+    <p>Bit Rate at Output of Interleaver Encoder: {{ interleaver_output }}</p>
+    {% endif %}
 </body>
 </html>
