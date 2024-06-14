@@ -1,10 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Page 2</title>
+    <title>Page 2 - 4G LTE System Calculator</title>
 </head>
 <body>
-    <h1>Welcome to Page 2</h1>
+    <h1>Welcome to Page 2 - 4G LTE System Calculator</h1>
     <button onclick="location.href='/'">Go to Home</button>
+
+    <h2>Calculator for 4G LTE System</h2>
+    <p>BW per resource block = 180 kHz</p> <!-- Added statement -->
+
+    <form method="POST">
+        <label for="subcarrier_spacing">Subcarrier Spacing (kHz):</label>
+        <select id="subcarrier_spacing" name="subcarrier_spacing" required>
+            <option value="7.5">7.5</option>
+            <option value="15">15</option>
+        </select><br><br>
+
+        <label for="num_ofdm_symbols">Number of OFDM Symbols:</label>
+        <select id="num_ofdm_symbols" name="num_ofdm_symbols" required>
+            <option value="6">6</option>
+            <option value="7">7</option>
+        </select><br><br>
+
+        <label for="resource_block_duration">Resource Block Duration (ms):</label>
+        <input type="number" step="any" id="resource_block_duration" name="resource_block_duration" required><br><br>
+
+        <label for="modulation_scheme">Modulation Scheme:</label>
+        <select id="modulation_scheme" name="modulation_scheme" required>
+            <option value="QPSK">QPSK</option>
+            <option value="16-QAM">16-QAM</option>
+            <option value="64-QAM">64-QAM</option>
+            <option value="256-QAM">256-QAM</option>
+            <option value="1024-QAM">1024-QAM</option>
+        </select><br><br>
+
+        <button type="submit">Calculate</button>
+    </form>
+
+    {% if bits_per_resource_element is not none %}
+    <h3>Results:</h3>
+    <p>Number of Bits per Resource Element: {{ bits_per_resource_element }}</p>
+    <p>Number of Bits per OFDM Symbol: {{ bits_per_ofdm_symbol }}</p>
+    <p>Number of Bits per OFDM Resource Block: {{ bits_per_ofdm_resource_block }}</p>
+    <p>Maximum Transmission Rate for 4 Parallel Resource Blocks per User: {{ max_transmission_rate }} bits/s</p>
+    {% endif %}
+
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
 </body>
 </html>
