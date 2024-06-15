@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculate in dB</title>
+</head>
+<body>
+    <h1>Calculate in dB</h1>
+    <form method="post" action="/calculate_db">
+        <label for="path_loss">Path Loss (dB):</label>
+        <input type="number" step="any" id="path_loss" name="path_loss" required><br><br>
+
+        <label for="frequency">Frequency (dB):</label>
+        <input type="number" step="any" id="frequency" name="frequency" required><br><br>
+
+        <label for="transmit_antenna_gain">Transmit Antenna Gain (dB):</label>
+        <input type="number" step="any" id="transmit_antenna_gain" name="transmit_antenna_gain" required><br><br>
+
+        <label for="receive_antenna_gain">Receive Antenna Gain (dB):</label>
+        <input type="number" step="any" id="receive_antenna_gain" name="receive_antenna_gain" required><br><br>
+
+        <label for="data_rate">Data Rate (dB):</label>
+        <input type="number" step="any" id="data_rate" name="data_rate" required><br><br>
+
+        <label for="antenna_feed_line_loss">Antenna Feed Line Loss (dB):</label>
+        <input type="number" step="any" id="antenna_feed_line_loss" name="antenna_feed_line_loss" required><br><br>
+
+        <label for="other_losses">Other Losses (dB):</label>
+        <input type="number" step="any" id="other_losses" name="other_losses" required><br><br>
+
+        <label for="fade_margin">Fade Margin (dB):</label>
+        <input type="number" step="any" id="fade_margin" name="fade_margin" required><br><br>
+
+        <label for="receiver_amplifier_gain">Receiver Amplifier Gain (dB):</label>
+        <input type="number" step="any" id="receiver_amplifier_gain" name="receiver_amplifier_gain" required><br><br>
+
+        <label for="noise_figure">Noise Figure Total (dB):</label>
+        <input type="number" step="any" id="noise_figure" name="noise_figure" required><br><br>
+
+        <label for="noise_temperature">Noise Temperature (dB):</label>
+        <input type="number" step="any" id="noise_temperature" name="noise_temperature" required><br><br>
+
+        <label for="link_margin">Link Margin (dB):</label>
+        <input type="number" step="any" id="link_margin" name="link_margin" required><br><br>
+
+        <label for="modulation_type">Modulation Type:</label>
+        <select id="modulation_type" name="modulation_type" required>
+            <option value="BPSK/QPSK">BPSK/QPSK</option>
+            <option value="8-PSK">8-PSK</option>
+            <option value="16-PSK">16-PSK</option>
+        </select><br><br>
+
+        <label for="bit_error_rate">Bit Error Rate:</label>
+        <select id="bit_error_rate" name="bit_error_rate" required>
+            <option value="10^-1">10^-1</option>
+            <option value="10^-2">10^-2</option>
+            <option value="10^-3">10^-3</option>
+            <option value="10^-4">10^-4</option>
+            <option value="10^-5">10^-5</option>
+            <option value="10^-6">10^-6</option>
+            <option value="10^-7">10^-7</option>
+            <option value="10^-8">10^-8</option>
+        </select><br><br>
+
+        <input type="submit" value="Calculate">
+    </form>
+    <button onclick="location.href='/page3'">Back</button>
+
+    {% if result %}
+    <h2>Results:</h2>
+    <p>Power Received (dB): {{ result.power_received_dB }} dB</p>
+    <p>Power Received (Unitless): {{ result.power_received_unitless }} W</p>
+    <p>Total Transmit Power (dB): {{ result.total_transmit_power_dB }} dB</p>
+    <p>Total Transmit Power (Unitless): {{ result.total_transmit_power_unitless }} W</p>
+    {% endif %}
+</body>
+</html>

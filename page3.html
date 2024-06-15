@@ -1,10 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Page 3</title>
+    <title>Page 3 - Total Transmit Power Calculator</title>
+    <style>
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .calc-button {
+            padding: 20px;
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+        }
+        .calc-button-dB {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .calc-button-unitless {
+            background-color: #2196F3;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Page 3</h1>
+    <h1>Welcome to Page 3 - Total Transmit Power Calculator</h1>
     <button onclick="location.href='/'">Go to Home</button>
+
+    <div class="button-container">
+        <button onclick="location.href='/calculate_db'" class="calc-button calc-button-dB">Calculate in dB</button>
+        <button onclick="location.href='/calculate_unitless'" class="calc-button calc-button-unitless">Calculate in Unitless</button>
+    </div>
 </body>
 </html>
