@@ -1,9 +1,57 @@
-from math import log10
 from flask import Flask, render_template, request
+from math import log10, sqrt
+import math
+from scipy.special import factorial
 
 app = Flask(__name__)
 
+# Constants
+SIR_dB = 13  # Minimum Signal to Interference Ratio in dB
+P0_dB = -22  # Power measured at reference distance in dB
+reference_distance = 10  # Reference distance in meters
+path_loss_exponent = 3  # Path loss exponent for urban area
+receiver_sensitivity = 7e-6  # Receiver sensitivity in watts
+city_area = 4000000  # Area of the city in square meters
+subscribers = 80000  # Number of subscribers
+average_calls_per_day = 8  # Average number of calls per day per subscriber
+average_call_duration = 3  # Average call duration in minutes
+num_timeslots = 8  # Number of timeslots per carrier
+GOS = 0.02  # Grade of Service (call drop probability)
 
+# Function to calculate the maximum distance
+def calculate_max_distance(P0_dB, receiver_sensitivity, path_loss_exponent, reference_distance):
+    P0 = 10 ** (P0_dB / 10)
+    max_distance = reference_distance * (P0 / receiver_sensitivity) ** (1 / path_loss_exponent)
+    return max_distance
+
+# Function to calculate the maximum cell size (assuming hexagonal cells)
+def calculate_max_cell_size(max_distance):
+    return (3 * sqrt(3) / 2) * (max_distance ** 2)
+
+# Function to calculate the number of cells in the service area
+def calculate_number_of_cells(city_area, cell_area):
+    return city_area / cell_area
+
+# Function to calculate the traffic load in the whole system in Erlangs
+def calculate_traffic_load(subscribers, average_calls_per_day, average_call_duration):
+    return (subscribers * average_calls_per_day * average_call_duration) / (24 * 60)
+
+# Function to calculate the traffic load in each cell in Erlangs
+def calculate_traffic_load_per_cell(total_traffic_load, num_cells):
+    return total_traffic_load / num_cells
+
+# Function to calculate the minimum number of carriers needed to achieve the required QoS
+def calculate_minimum_carriers(traffic_load_per_cell, num_timeslots, GOS):
+    def erlang_b_formula(c, a):
+        inv_b = sum((a ** i) / factorial(i) for i in range(c + 1))
+        return (a ** c) / (factorial(c) * inv_b)
+
+    c = 1
+    while erlang_b_formula(c, traffic_load_per_cell) > GOS:
+        c += 1
+    return (c // num_timeslots) + 1
+
+#-----------------------------------------------
 K = 1.38e-23  # Boltzmann constant in unitless
 K_dB = 10 * log10(K)  # Convert Boltzmann constant to dB
 
@@ -212,14 +260,57 @@ def calculate_unitless():
 
     return render_template('calculate_unitless.html')
 
-
-@app.route('/page4')
+@app.route('/page4', methods=['GET', 'POST'])
 def page4():
+    if request.method == 'POST':
+        # Retrieve form data
+        propagation_time = float(request.form['propagation_time'])
+        frame_size = float(request.form['frame_size'])
+        rate = float(request.form['rate'])
+        frame_rate = float(request.form['frame_rate'])
+        
+        # Perform calculations
+        T_frame = frame_size / rate
+        G = frame_rate * T_frame
+        alpha = propagation_time / T_frame
+        
+        numerator = G * math.exp(-2 * alpha * T_frame)
+        denominator = G * (1 + 2 * alpha) + math.exp(-alpha * G)
+        throughput = numerator / denominator
+        throughput_percent = throughput * 100
+        
+        return render_template('page4.html', throughput_percent=throughput_percent)
+    
     return render_template('page4.html')
 
-@app.route('/page5')
+
+@app.route('/page5', methods=['GET', 'POST'])
 def page5():
+    if request.method == 'POST':
+       # Perform calculations
+        max_distance = calculate_max_distance(P0_dB, receiver_sensitivity, path_loss_exponent, reference_distance)
+        max_cell_size = calculate_max_cell_size(max_distance)
+        num_cells = calculate_number_of_cells(city_area, max_cell_size)
+        total_traffic_load = calculate_traffic_load(subscribers, average_calls_per_day, average_call_duration)
+        traffic_load_per_cell = calculate_traffic_load_per_cell(total_traffic_load, num_cells)
+        min_carriers = calculate_minimum_carriers(traffic_load_per_cell, num_timeslots, GOS)
+        min_carriers_QoS_0_05 = calculate_minimum_carriers(traffic_load_per_cell, num_timeslots, 0.05)
+
+        result = {
+            "max_distance": max_distance,
+            "max_cell_size": max_cell_size,
+            "num_cells": num_cells,
+            "total_traffic_load": total_traffic_load,
+            "traffic_load_per_cell": traffic_load_per_cell,
+            "min_carriers": min_carriers,
+            "min_carriers_QoS_0_05": min_carriers_QoS_0_05
+        }
+
+        return render_template('page5.html', result=result)
+
     return render_template('page5.html')
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
