@@ -2,26 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page 4</title>
+    <title>Throughput Calculation</title>
 </head>
 <body>
-    <h1>Page 4</h1>
+    <h1>Welcome to Page 4</h1>
     <button onclick="location.href='/'">Go to Home</button>
-    <form method="POST">
-        <label for="propagation_time">Propagation Time:</label>
-        <input type="text" id="propagation_time" name="propagation_time"><br><br>
-        <label for="frame_size">Frame Size:</label>
-        <input type="text" id="frame_size" name="frame_size"><br><br>
-        <label for="rate">Rate:</label>
-        <input type="text" id="rate" name="rate"><br><br>
-        <label for="frame_rate">Frame Rate:</label>
-        <input type="text" id="frame_rate" name="frame_rate"><br><br>
-        <button type="submit">Calculate</button>
+    <h2>Throughput Calculation</h2>
+    <form method="POST" action="/page4">
+        <label for="frame_size">Frame Size (bits):</label>
+        <input type="text" id="frame_size" name="frame_size" required><br><br>
+
+        <label for="rate">Rate (bps):</label>
+        <input type="text" id="rate" name="rate" required><br><br>
+
+        <label for="frame_rate">Frame Rate (fps):</label>
+        <input type="text" id="frame_rate" name="frame_rate" required><br><br>
+
+        <label for="propagation_time">Propagation Time (sec):</label>
+        <input type="text" id="propagation_time" name="propagation_time" required><br><br>
+
+        <label for="access_method">Access Method:</label>
+        <select id="access_method" name="access_method" required>
+            <option value="slotted">Slotted</option>
+            <option value="non-slotted">Non-Slotted</option>
+        </select><br><br>
+
+        <input type="submit" value="Calculate Throughput">
     </form>
 
-    {% if throughput_percent %}
-        <h2>Throughput Percentage: {{ throughput_percent }}%</h2>
+    {% if throughput_percent is defined %}
+        <h3>Throughput Result:</h3>
+        <p>The throughput is: {{ throughput_percent }}%</p>
     {% endif %}
 </body>
 </html>
