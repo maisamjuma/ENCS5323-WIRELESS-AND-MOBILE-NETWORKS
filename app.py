@@ -17,6 +17,7 @@ average_calls_per_day = 8  # Average number of calls per day per subscriber
 average_call_duration = 3  # Average call duration in minutes
 num_timeslots = 8  # Number of timeslots per carrier
 GOS = 0.02  # Grade of Service (call drop probability)
+num_co_channel_cells = 6  # Given: Number of co-channel interfering cells
 
 # Function to calculate the maximum distance
 def calculate_max_distance(P0_dB, receiver_sensitivity, path_loss_exponent, reference_distance):

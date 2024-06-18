@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Page 5</title>
+    <meta charset="UTF-8">
+    <title>Cellular System Design</title>
 </head>
 <body>
-    <h1>Welcome to Page 5</h1>
+    <h1>Page 5: Cellular System Design</h1>
     <button onclick="location.href='/'">Go to Home</button>
+    <form method="post">
+        <h2>Results:</h2>
+        {% if result %}
+            <p>Maximum distance between transmitter and receiver for reliable communication: {{ result.max_distance }} meters</p>
+            <p>Maximum cell size (hexagonal cells): {{ result.max_cell_size }} square meters</p>
+            <p>Number of cells in the service area: {{ result.num_cells }}</p>
+            <p>Traffic load in the whole cellular system: {{ result.total_traffic_load }} Erlangs</p>
+            <p>Traffic load in each cell: {{ result.traffic_load_per_cell }} Erlangs</p>
+            <p>Minimum number of carriers needed (QoS = 0.02): {{ result.min_carriers }}</p>
+            <p>Minimum number of carriers needed (QoS = 0.05): {{ result.min_carriers_QoS_0_05 }}</p>
+        {% else %}
+            <p>No results yet.</p>
+        {% endif %}
+        <input type="submit" value="Calculate">
+    </form>
 </body>
 </html>
