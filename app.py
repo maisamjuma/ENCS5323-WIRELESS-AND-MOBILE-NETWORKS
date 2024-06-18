@@ -300,18 +300,38 @@ def page4():
     
     return render_template('page4.html')
 
-
 @app.route('/page5', methods=['GET', 'POST'])
 def page5():
     if request.method == 'POST':
-       # Perform calculations
+        # Get input values from the form
+        SIR_dB = float(request.form['SIR_dB'])
+        P0_dB = float(request.form['P0_dB'])
+        reference_distance = float(request.form['reference_distance'])
+        path_loss_exponent = float(request.form['path_loss_exponent'])
+        receiver_sensitivity = float(request.form['receiver_sensitivity'])
+        city_area = float(request.form['city_area'])
+        subscribers = float(request.form['subscribers'])
+        average_calls_per_day = float(request.form['average_calls_per_day'])
+        average_call_duration = float(request.form['average_call_duration'])
+        num_timeslots = float(request.form['num_timeslots'])
+        GOS = float(request.form['GOS'])
+        num_co_channel_cells = float(request.form['num_co_channel_cells'])
+
+        # Perform calculations
         max_distance = calculate_max_distance(P0_dB, receiver_sensitivity, path_loss_exponent, reference_distance)
         max_cell_size = calculate_max_cell_size(max_distance)
-        num_cells = calculate_number_of_cells(city_area, max_cell_size)
+        num_cells = math.ceil(calculate_number_of_cells(city_area, max_cell_size))
         total_traffic_load = calculate_traffic_load(subscribers, average_calls_per_day, average_call_duration)
         traffic_load_per_cell = calculate_traffic_load_per_cell(total_traffic_load, num_cells)
-        min_carriers = calculate_minimum_carriers(traffic_load_per_cell, num_timeslots, GOS)
-        min_carriers_QoS_0_05 = calculate_minimum_carriers(traffic_load_per_cell, num_timeslots, 0.05)
+        min_carriers = math.ceil(calculate_minimum_carriers(traffic_load_per_cell, num_timeslots, GOS))
+        min_carriers_QoS_0_05 = math.ceil(calculate_minimum_carriers(traffic_load_per_cell, num_timeslots, 0.05))
+
+        # Calculate SIR in unitless
+        SIR_unitless = 10 ** (SIR_dB / 10)
+
+        # Calculate number of cells in each cluster
+        h = average_call_duration
+        num_cells_per_cluster = math.ceil(((SIR_unitless * num_co_channel_cells) ** (1 / h)) ** 2 / 3)
 
         result = {
             "max_distance": max_distance,
@@ -319,6 +339,7 @@ def page5():
             "num_cells": num_cells,
             "total_traffic_load": total_traffic_load,
             "traffic_load_per_cell": traffic_load_per_cell,
+            "num_cells_per_cluster": num_cells_per_cluster,
             "min_carriers": min_carriers,
             "min_carriers_QoS_0_05": min_carriers_QoS_0_05
         }
@@ -326,6 +347,7 @@ def page5():
         return render_template('page5.html', result=result)
 
     return render_template('page5.html')
+
 
 
 

@@ -8,19 +8,58 @@
     <h1>Page 5: Cellular System Design</h1>
     <button onclick="location.href='/'">Go to Home</button>
     <form method="post">
-        <h2>Results:</h2>
-        {% if result %}
-            <p>Maximum distance between transmitter and receiver for reliable communication: {{ result.max_distance }} meters</p>
-            <p>Maximum cell size (hexagonal cells): {{ result.max_cell_size }} square meters</p>
-            <p>Number of cells in the service area: {{ result.num_cells }}</p>
-            <p>Traffic load in the whole cellular system: {{ result.total_traffic_load }} Erlangs</p>
-            <p>Traffic load in each cell: {{ result.traffic_load_per_cell }} Erlangs</p>
-            <p>Minimum number of carriers needed (QoS = 0.02): {{ result.min_carriers }}</p>
-            <p>Minimum number of carriers needed (QoS = 0.05): {{ result.min_carriers_QoS_0_05 }}</p>
-        {% else %}
-            <p>No results yet.</p>
-        {% endif %}
+        <h2>Input Constants:</h2>
+        <label for="SIR_dB">Minimum Signal to Interference Ratio (dB):</label>
+        <input type="number" step="0.01" id="SIR_dB" name="SIR_dB" value="13"><br><br>
+        
+        <label for="P0_dB">Power measured at reference distance (dB):</label>
+        <input type="number" step="0.01" id="P0_dB" name="P0_dB" value="-22"><br><br>
+        
+        <label for="reference_distance">Reference distance (meters):</label>
+        <input type="number" step="0.01" id="reference_distance" name="reference_distance" value="10"><br><br>
+        
+        <label for="path_loss_exponent">Path loss exponent:</label>
+        <input type="number" step="0.01" id="path_loss_exponent" name="path_loss_exponent" value="3"><br><br>
+        
+        <label for="receiver_sensitivity">Receiver sensitivity (watts):</label>
+        <input type="number" step="0.01" id="receiver_sensitivity" name="receiver_sensitivity" value="7e-6"><br><br>
+        
+        <label for="city_area">Area of the city (square meters):</label>
+        <input type="number" step="0.01" id="city_area" name="city_area" value="4000000"><br><br>
+        
+        <label for="subscribers">Number of subscribers:</label>
+        <input type="number" step="0.01" id="subscribers" name="subscribers" value="80000"><br><br>
+        
+        <label for="average_calls_per_day">Average number of calls per day per subscriber:</label>
+        <input type="number" step="0.01" id="average_calls_per_day" name="average_calls_per_day" value="8"><br><br>
+        
+        <label for="average_call_duration">Average call duration (minutes):</label>
+        <input type="number" step="0.01" id="average_call_duration" name="average_call_duration" value="3"><br><br>
+        
+        <label for="num_timeslots">Number of timeslots per carrier:</label>
+        <input type="number" step="0.01" id="num_timeslots" name="num_timeslots" value="8"><br><br>
+        
+        <label for="GOS">Grade of Service (call drop probability):</label>
+        <input type="number" step="0.01" id="GOS" name="GOS" value="0.02"><br><br>
+        
+        <label for="num_co_channel_cells">Number of co-channel interfering cells:</label>
+        <input type="number" step="0.01" id="num_co_channel_cells" name="num_co_channel_cells" value="6"><br><br>
+        
         <input type="submit" value="Calculate">
     </form>
+
+    <h2>Results:</h2>
+    {% if result %}
+        <p>Maximum distance between transmitter and receiver for reliable communication: {{ result.max_distance }} meters</p>
+        <p>Maximum cell size (hexagonal cells): {{ result.max_cell_size }} square meters</p>
+        <p>Number of cells in the service area: {{ result.num_cells }}</p>
+        <p>Traffic load in the whole cellular system: {{ result.total_traffic_load }} Erlangs</p>
+        <p>Traffic load in each cell: {{ result.traffic_load_per_cell }} Erlangs</p>
+        <p>Number of cells in each cluster: {{ result.num_cells_per_cluster }}</p>
+        <p>Minimum number of carriers needed (QoS = 0.02): {{ result.min_carriers }}</p>
+        <p>Minimum number of carriers needed (QoS = 0.05): {{ result.min_carriers_QoS_0_05 }}</p>
+    {% else %}
+        <p>No results yet.</p>
+    {% endif %}
 </body>
 </html>
