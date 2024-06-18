@@ -263,20 +263,36 @@ def calculate_unitless():
 @app.route('/page4', methods=['GET', 'POST'])
 def page4():
     if request.method == 'POST':
-        # Retrieve form data
-        propagation_time = float(request.form['propagation_time'])
+        # Get input values from the form
         frame_size = float(request.form['frame_size'])
         rate = float(request.form['rate'])
         frame_rate = float(request.form['frame_rate'])
-        
-        # Perform calculations
+        propagation_time = float(request.form['propagation_time'])
+        slotted_access = request.form['access_method']
+
+        # Calculate frame period
         T_frame = frame_size / rate
+
+        # Calculate load (G)
         G = frame_rate * T_frame
+
+        # Calculate alpha (α)
         alpha = propagation_time / T_frame
-        
-        numerator = G * math.exp(-2 * alpha * T_frame)
-        denominator = G * (1 + 2 * alpha) + math.exp(-alpha * G)
-        throughput = numerator / denominator
+
+        if slotted_access == 'slotted':
+            # Calculate throughput for slotted access
+            numerator =  alpha * G * math.exp(-2 * alpha * T_frame)
+            denominator = G * (1 +  alpha - math.exp(-2 * alpha * G))
+            throughput = numerator / denominator
+        elif slotted_access == 'non-slotted':
+            # Calculate throughput for non-slotted access
+            numerator = G * math.exp(-2 * alpha * T_frame)
+            denominator = G * (1 + 2 * alpha) + math.exp(-alpha * G)
+            throughput = numerator / denominator
+        else:
+            return render_template('page4.html', error="Invalid access method selected")
+
+        # Calculate throughput as percentage
         throughput_percent = throughput * 100
         
         return render_template('page4.html', throughput_percent=throughput_percent)
