@@ -5,20 +5,6 @@ from scipy.special import factorial
 
 app = Flask(__name__)
 
-# Constants
-SIR_dB = 13  # Minimum Signal to Interference Ratio in dB
-P0_dB = -22  # Power measured at reference distance in dB
-reference_distance = 10  # Reference distance in meters
-path_loss_exponent = 3  # Path loss exponent for urban area
-receiver_sensitivity = 7e-6  # Receiver sensitivity in watts
-city_area = 4000000  # Area of the city in square meters
-subscribers = 80000  # Number of subscribers
-average_calls_per_day = 8  # Average number of calls per day per subscriber
-average_call_duration = 3  # Average call duration in minutes
-num_timeslots = 8  # Number of timeslots per carrier
-GOS = 0.02  # Grade of Service (call drop probability)
-num_co_channel_cells = 6  # Given: Number of co-channel interfering cells
-
 # Erlang B table (blocked calls cleared) with traffic intensities for given blocking probabilities
 erlang_b_table = {
     0.001: [0.001, 0.046, 0.194, 0.439, 0.762, 1.1, 1.6, 2.1, 2.6, 3.1, 3.7, 4.2, 4.8, 5.4, 6.1, 6.7, 7.4, 8.0, 8.7, 9.4, 10.1, 10.8, 11.5, 12.2, 13.0, 13.7, 14.4, 15.2, 15.9, 16.7, 17.4, 18.2, 19.0, 19.7, 20.5, 21.3, 22.1, 22.9, 23.7, 24.4, 25.2, 26.0, 26.8, 27.6, 28.4],
