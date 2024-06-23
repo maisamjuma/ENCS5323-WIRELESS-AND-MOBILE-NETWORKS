@@ -215,13 +215,13 @@ def calculate_unitless():
         eb_no_unitless = 10 ** (eb_no_dB / 10)
 
         # Calculate power received in unitless (Watt)
-        power_received_unitless = (link_margin * K * noise_temperature * noise_figure * data_rate * eb_no_unitless) / frequency
+        power_received_unitless = (link_margin * K * noise_temperature * noise_figure * data_rate * eb_no_unitless)
 
         # Convert power received to dB
         power_received_dB = 10 * log10(power_received_unitless)
 
         # Calculate total transmit power in unitless (Watt)
-        total_transmit_power_unitless = (power_received_unitless * path_loss * antenna_feed_line_loss * other_losses * fade_margin) / (transmit_antenna_gain * receive_antenna_gain * receiver_amplifier_gain)
+        total_transmit_power_unitless = ((power_received_unitless * path_loss * antenna_feed_line_loss * other_losses * fade_margin) / (transmit_antenna_gain * receive_antenna_gain * receiver_amplifier_gain)*10)
 
         # Convert total transmit power to dB
         total_transmit_power_dB = 10 * log10(total_transmit_power_unitless)
